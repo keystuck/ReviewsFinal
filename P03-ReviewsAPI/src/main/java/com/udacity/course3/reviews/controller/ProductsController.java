@@ -1,11 +1,18 @@
 package com.udacity.course3.reviews.controller;
 
+import com.udacity.course3.reviews.model.Product;
+import com.udacity.course3.reviews.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring REST controller for working with product entity.
@@ -14,18 +21,17 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductsController {
 
-    // TODO: Wire JPA repositories here
+    @Autowired
+    private ProductRepository productRepository;
 
     /**
      * Creates a product.
-     *
-     * 1. Accept product as argument. Use {@link RequestBody} annotation.
-     * 2. Save product.
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct() {
-        throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
+    public void createProduct(@Valid @RequestBody Product product) {
+        productRepository.save(product);
+
     }
 
     /**
@@ -36,7 +42,10 @@ public class ProductsController {
      */
     @RequestMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
-        throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()){
+            return ResponseEntity.accepted().body(optionalProduct.get());
+        } else return ResponseEntity.notFound().build();
     }
 
     /**
@@ -46,6 +55,10 @@ public class ProductsController {
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<?> listProducts() {
-        throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
+        List<Product> productList = new ArrayList<>();
+        for (Product product : productRepository.findAll()){
+            productList.add(product);
+        }
+        return productList;
     }
 }
