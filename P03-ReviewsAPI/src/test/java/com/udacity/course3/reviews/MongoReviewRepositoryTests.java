@@ -12,24 +12,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManagerAutoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@DataMongoTest(excludeAutoConfiguration = {JpaRepositoriesAutoConfiguration.class})
+@DataMongoTest
 public class MongoReviewRepositoryTests {
 
-    Product product;
-    String testReviewerName = "testReviwerName";
-    int testReviewId = 800;
+
+
+    private Product product;
+    private String testReviewerName = "testReviwerName";
+    private int testReviewId = 800;
 
     @Autowired
-    MongoReviewRepository mongoReviewRepository;
+    private MongoReviewRepository mongoReviewRepository;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -49,6 +55,7 @@ public class MongoReviewRepositoryTests {
         mongoReview.setReviewText("TestReviewText");
         mongoReviewRepository.save(mongoReview);
     }
+
 
     @Test
     public void findByProduct(){
