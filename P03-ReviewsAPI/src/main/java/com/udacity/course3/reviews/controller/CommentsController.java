@@ -1,21 +1,15 @@
 package com.udacity.course3.reviews.controller;
 
-import com.mongodb.Mongo;
 import com.udacity.course3.reviews.model.Comment;
 import com.udacity.course3.reviews.model.MongoReview;
 import com.udacity.course3.reviews.model.Review;
 import com.udacity.course3.reviews.mongorepository.MongoReviewRepository;
-import com.udacity.course3.reviews.repository.CommentRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +26,6 @@ public class CommentsController {
     @Qualifier("reviewRepository")
     private ReviewRepository reviewRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
 
     @Autowired
             @Qualifier("mongoReviewRepository")
@@ -54,7 +46,6 @@ public class CommentsController {
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
         if (optionalReview.isPresent()){
             comment.setReview(optionalReview.get());
-            commentRepository.save(comment);
 
             MongoReview mongoReview = mongoReviewRepository.findByReviewId(reviewId);
             if (mongoReview !=  null){
@@ -83,7 +74,6 @@ public class CommentsController {
         List<Comment> commentList = new ArrayList<>();
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
         if (optionalReview.isPresent()){
-            commentList = commentRepository.findByReview(optionalReview.get());
             MongoReview mongoReview = mongoReviewRepository.findByReviewId(reviewId);
             if (mongoReview != null){
                 commentList.addAll(mongoReview.getComments());

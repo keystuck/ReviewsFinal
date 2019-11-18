@@ -2,7 +2,6 @@ package com.udacity.course3.reviews.mongorepository;
 
 import com.udacity.course3.reviews.model.MongoReview;
 import com.udacity.course3.reviews.model.Product;
-import com.udacity.course3.reviews.model.Review;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

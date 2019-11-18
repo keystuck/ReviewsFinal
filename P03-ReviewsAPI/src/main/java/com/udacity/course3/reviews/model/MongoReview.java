@@ -1,7 +1,6 @@
 package com.udacity.course3.reviews.model;
 
 
-import com.mongodb.Mongo;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.mongodb.core.mapping.Document;
